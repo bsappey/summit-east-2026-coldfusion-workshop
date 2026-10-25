@@ -1,0 +1,13 @@
+<cfscript>
+    // Day-of key for a local run.
+    // 1. Copy this file to openai-key.cfm in this same folder.
+    // 2. Replace the placeholder with the key the instructor gives you. Save.
+    // 3. Refresh the chat page. No ColdFusion restart.
+    //
+    // openai-key.cfm is gitignored. Do not commit it.
+    // One paste covers StyleMart (S1-S6) and samples/aihotfix/.
+    // Paste into the copy the server is actually running:
+    //   port 8500: C:\ColdFusion2025\cfusion\wwwroot\CFSummit2026Workshop\StyleMart\config\openai-key.cfm
+    //   port 8080 CommandBox: this clone's StyleMart\config\openai-key.cfm
+    request.workshopOpenAiKey = "paste-the-key-here";
+</cfscript>

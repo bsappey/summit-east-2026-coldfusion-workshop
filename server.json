@@ -1,0 +1,23 @@
+{
+    "name":"ColdFusion Summit 2026 Workshop",
+    "app":{
+        "cfengine":"adobe@2025",
+        "restMappings":"/rest/*",
+        "libDirs":"kit"
+    },
+    "engine":"@adobe2025",
+    "jvm":{
+        "javaVersion":"openjdk17"
+    },
+    "web":{
+        "bindings":{
+            "HTTP":{
+                "listen":"8080"
+            }
+        },
+        "rewrites":{
+            "enable":true
+        }
+    },
+    "openbrowser":false
+}
