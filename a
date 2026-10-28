@@ -114,3 +114,25 @@ C:\ColdFusion2025\cfusion\lib\pathfilter.json
 
 
 http://127.0.0.1:8080/resources/database/buildDatabase.cfm
+
+for the jar file allow the .exe
+
+n port 8500 the file is C:\ColdFusion2025\cfusion\lib\security-settings.json. Change the mcp block to:
+"mcp": {
+    "commandWhitelist": [
+        "java.exe",
+        "C:/ColdFusion2025/jre/bin/java.exe"
+    ]
+}
+
+then restart
+
+
+
+On port 8080 the file is CommandBox server, 
+not in the git repo. From the workshop folder run box server info property=serverHomeDirectory. 
+The file is <that folder>\WEB-INF\cfusion\lib\security-settings.json. 
+Put java.exe and the full path to that server’s java.exe in commandWhitelist, using forward slashes. 
+The path is the command value already written in StyleMart\api\agent\s4\config\mcp-servers.json after one chat attempt. T
+hen run box server restart "ColdFusion Summit 2026 Workshop" and start a new chat.
+ 
