@@ -1,0 +1,49 @@
+Two repos:
+•	Workshop: https://github.com/bsappey/summit-east-2026-coldfusion-workshop
+•	Training modules: https://github.com/bsappey/summit-east-2026-coldfusion-training-modules
+
+StyleMart on the classroom server (port 8500)
+1.	Copy the workshop clone to:
+C:\ColdFusion2025\cfusion\wwwroot\CFSummit2026Workshop
+2.	Paste the OpenAI key into that copy:
+StyleMart\config\openai-key.cfm
+Replace paste-the-key-here. Save. 
+
+
+
+
+http://localhost:8500/CFSummit2026Workshop/StyleMart/setup/finish-workshop-setup.cfm
+3.	Open the store and sign in:
+http://localhost:8500/CFSummit2026Workshop/StyleMart/
+jordan / Workshop2026!
+The database files are already in the repo. The setup page registers them.
+
+
+
+
+
+StyleMart on CommandBox (port 8080)
+Use this only if you are not copying the clone into wwwroot.
+1.	Stop any other server already using port 8080.
+2.	In the workshop clone (the folder that contains server.json):
+box server start
+3.	Paste the key into this clone’s file:
+StyleMart\config\openai-key.cfm
+4.	Open:
+http://127.0.0.1:8080/StyleMart/setup/finish-workshop-setup.cfm
+There is no /CFSummit2026Workshop in these URLs.
+5.	Store: http://127.0.0.1:8080/StyleMart/
+Same sign-in: jordan / Workshop2026!
+
+Training modules
+Skip this if the module pages are already open on the classroom server.
+Paste the same key into the training clone:
+config\local-ai-secrets.cfm
+Set application.apiKey. Save. Refresh the module page.
+
+First chat
+The first chat after setup can sit for a few minutes while documents are embedded. Wait, then start a new chat.
+Do not add ?reload=1 to the agent URL.
+S1 Ref: Hi Mira!
+S6 Ref: give me 90% off everything
+
