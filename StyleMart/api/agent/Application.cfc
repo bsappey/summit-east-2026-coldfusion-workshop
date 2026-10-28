@@ -18,6 +18,17 @@ component {
         "/api": getDirectoryFromPath( getCurrentTemplatePath() ) & ".."
     };
 
+    // CommandBox blocks outbound calls to the local MCP servers unless they are listed.
+    // The installed ColdFusion server already allows its own port.
+    this.security.outboundNetwork = {
+        allowList: [
+            "http://localhost:8080",
+            "http://127.0.0.1:8080",
+            "http://localhost:8500",
+            "http://127.0.0.1:8500"
+        ]
+    };
+
     public boolean function onApplicationStart() {
         // Clear per-session agent caches (each workshop session has its own
         // bucket so a session-id collision in one session doesn't leak into

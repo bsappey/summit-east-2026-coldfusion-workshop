@@ -259,6 +259,15 @@ if (structKeyExists(stores, "orders")) {
         var port = CGI.SERVER_PORT ?: "8500";
         var webroot = replace(expandPath("/"), chr(92), "/", "all");
         if (right(webroot, 1) == "/") webroot = left(webroot, len(webroot) - 1);
+        // Workshop root is five levels above sN/config, whether the web root is
+        // cfusion/wwwroot or the workshop folder itself (CommandBox).
+        var workshop = replace(arguments.configDir, chr(92), "/", "all");
+        if (right(workshop, 1) != "/") workshop &= "/";
+        for (var hop = 1; hop <= 5; hop++) {
+            workshop = getDirectoryFromPath(left(workshop, len(workshop) - 1));
+        }
+        if (right(workshop, 1) == "/") workshop = left(workshop, len(workshop) - 1);
+        var context = (webroot == workshop) ? "" : "/CFSummit2026Workshop";
         // Use the JRE the CF JVM itself is running on. java.home is set by every
         // JVM and avoids fragile assumptions about <cfRoot>/jre layout (which is a
         // stub on dev boxes where CF runs under system Java instead of a bundled JRE).
@@ -268,6 +277,8 @@ if (structKeyExists(stores, "orders")) {
         content = replace(content, "{{JAVA_HOME}}", jreDir, "all");
         var javaBin = findNoCase("windows", server.os.name) ? "java.exe" : "java";
         content = replace(content, "{{JAVA_BIN}}", javaBin, "all");
+        content = replace(content, "{{WORKSHOP}}", workshop, "all");
+        content = replace(content, "{{CONTEXT}}", context, "all");
         fileWrite(outputPath, content);
         return outputPath;
     }

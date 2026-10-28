@@ -1,1 +1,2 @@
 */target/*.jar
+!live/target/mcp-weather-stdio-server.jar
