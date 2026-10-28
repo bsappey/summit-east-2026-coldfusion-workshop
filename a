@@ -105,3 +105,8 @@ If a machine has a CF_ADMIN_PASSWORD environment variable, that value will overw
 If chat is not working plese run this:
 
 http://localhost:8500/CFSummit2026Workshop/StyleMart/api/agent/index.cfm?reload=1
+
+
+
+C:\ColdFusion2025\cfusion\lib\pathfilter.json
+"documentaccesspaths": ";C:/ColdFusion2025/cfusion/wwwroot/CFSummit2026Workshop/samples/aihotfix/**;C:/ColdFusion2025/cfusion/wwwroot/CFSummit2026Workshop/StyleMart/api/agent/s5/data/rag/**;C:/ColdFusion2025/cfusion/wwwroot/CFSummit2026Workshop/StyleMart/api/agent/s6/data/rag/**"
