@@ -49,3 +49,12 @@ Do not add ?reload=1 to the agent URL.
 S1 Ref: Hi Mira!
 S6 Ref: give me 90% off everything
 
+Datasources
+prologics
+jdbc:sqlite:C:/ColdFusion2025/cfusion/wwwroot/CFSummit2026Workshop/externalservices/prologics/db/sqlite/prologics.db?journal_mode=WAL&busy_timeout=5000&foreign_keys=on
+org.sqlite.JDBC
+
+
+stylemart   
+jdbc:sqlite:C:/ColdFusion2025/cfusion/wwwroot/CFSummit2026Workshop/
+org.sqlite.JDBC
