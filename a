@@ -78,3 +78,9 @@ That page should say it registered prologics and stylemart, with products.count 
 If wwwroot\CFSummit2026Workshop is not where your copy lives, copy kit\sqlite-jdbc-3.45.3.0.jar from the clone instead. The natives-only jar does not fix this. Restart once. Setup before the restart will keep failing.
 
 
+
+http://localhost:8500/CFSummit2026Workshop/StyleMart/setup/reset-sqlite-datasources.cfm
+It should register stylemart and prologics, and show products.count = 200.
+
+http://localhost:8500/CFSummit2026Workshop/StyleMart/api/commerce/register.cfm
+It should say the commerce REST app registered.
