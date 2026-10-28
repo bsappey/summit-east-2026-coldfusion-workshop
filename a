@@ -58,3 +58,24 @@ org.sqlite.JDBC
 stylemart   
 jdbc:sqlite:C:/ColdFusion2025/cfusion/wwwroot/CFSummit2026Workshop/
 org.sqlite.JDBC
+
+
+
+Database Error
+error Connection verification failed for data source: prologics
+java.sql.SQLException: No suitable driver available for prologics.
+
+
+
+Copy-Item "C:\ColdFusion2025\cfusion\wwwroot\CFSummit2026Workshop\kit\sqlite-jdbc-3.45.3.0.jar" "C:\ColdFusion2025\cfusion\lib\" -Force
+Restart-Service -Name "ColdFusion 2025 Application Server" -Force
+
+Wait until http://localhost:8500 loads again, then open:
+
+http://localhost:8500/CFSummit2026Workshop/StyleMart/setup/reset-sqlite-datasources.cfm
+
+That page should say it registered prologics and stylemart, with products.count = 200.
+
+If wwwroot\CFSummit2026Workshop is not where your copy lives, copy kit\sqlite-jdbc-3.45.3.0.jar from the clone instead. The natives-only jar does not fix this. Restart once. Setup before the restart will keep failing.
+
+
