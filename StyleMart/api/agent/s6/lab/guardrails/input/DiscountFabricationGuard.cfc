@@ -8,6 +8,25 @@ component {
    * tool and interpolate them into the message so the block is helpful.
    */
   public struct function validate( required string userMessage ) {
+
+    // Adobe invokes validate() through UdfInvocationUtil, which cannot see other
+    // methods on this CFC. The helper below is local so the attendee call works.
+    var getEligibleCouponsText = function( required string userId ) {
+      if ( !len( arguments.userId ) ) return "";
+      try {
+        var mcp = createObject( "component", "api.agent.s6.lab.mcp.CommerceOpsServer" );
+        var result = mcp.getEligibleCoupons( userId = arguments.userId );
+        if ( isStruct( result ) && structKeyExists( result, "coupons" ) && isArray( result.coupons ) ) {
+          var labels = [];
+          for ( var c in result.coupons ) {
+            arrayAppend( labels, ( c.code ?: "" ) & ( len( c.description ?: "" ) ? " (" & c.description & ")" : "" ) );
+          }
+          return arrayToList( labels, ", " );
+        }
+      } catch ( any e ) { /* swallow — graceful degrade */ }
+      return "";
+    };
+
     var trace = new api.agent.s6.GuardrailTrace();
     var out = { result: "success", message: "", repromptMessage: "" };
     var msg = trace.userTurn( arguments.userMessage );
@@ -42,7 +61,7 @@ component {
     //   ];
     //
     // ── HELPFUL BLOCK (provided — copy this verbatim when hit==true) ──
-    //   var offers = getEligibleCouponsText( request.userId ?: "" );  // already-implemented helper below
+    //   var offers = getEligibleCouponsText( request.userId ?: "" );  // helper defined at the top of validate()
     //   out.result  = "fatal";
     //   out.message = "I can't apply discounts that aren't in our coupon catalog."
     //               & ( len(offers) ? " Your current eligible offers are: " & offers & "." : "" );
@@ -75,24 +94,5 @@ component {
 
     trace.report( "discount-fabrication", "input", out );
     return out;
-  }
-
-  /**
-   * Best-effort MCP lookup. Returns "" if MCP is unavailable — the block still fires.
-   */
-  private string function getEligibleCouponsText( required string userId ) {
-    if ( !len( arguments.userId ) ) return "";
-    try {
-      var mcp = createObject( "component", "api.agent.s6.lab.mcp.CommerceOpsServer" );
-      var result = mcp.getEligibleCoupons( userId = arguments.userId );
-      if ( isStruct( result ) && structKeyExists( result, "coupons" ) && isArray( result.coupons ) ) {
-        var labels = [];
-        for ( var c in result.coupons ) {
-          arrayAppend( labels, ( c.code ?: "" ) & ( len( c.description ?: "" ) ? " (" & c.description & ")" : "" ) );
-        }
-        return arrayToList( labels, ", " );
-      }
-    } catch ( any e ) { /* swallow — graceful degrade */ }
-    return "";
   }
 }

@@ -41,7 +41,17 @@ component {
                     var sessionAgent = agent(agentConfig);
 
                     var basePrompt = replace(cfg.systemPrompt, "{preferences}", "(provided with each message under ""Known preferences"")");
-                    sessionAgent.systemMessage(basePrompt, arguments.userId);
+                    // CommandBox runs input guardrails during systemMessage(). If this
+                    // request already has the shopper's text, a discount ask blocks
+                    // agent setup and the chat returns an error instead of the shield.
+                    var hadUserText = structKeyExists(request, "userText");
+                    var savedUserText = hadUserText ? request.userText : "";
+                    if (hadUserText) structDelete(request, "userText");
+                    try {
+                        sessionAgent.systemMessage(basePrompt, arguments.userId);
+                    } finally {
+                        if (hadUserText) request.userText = savedUserText;
+                    }
 
                     application.s6Agents[arguments.sessionId] = {
                         "cfg":         cfg,
@@ -265,7 +275,7 @@ Question: {{userMessage}}",
         if (structKeyExists(guardrails, "input") && isArray(guardrails.input)) {
             var inputGuardrails = [];
             for (var path in guardrails.input) {
-                arrayAppend(inputGuardrails, expandPath(base & path));
+                arrayAppend(inputGuardrails, guardrailPath(expandPath(base & path)));
             }
             arguments.agentConfig.INPUTGUARDRAILS = inputGuardrails;
         }
@@ -275,7 +285,7 @@ Question: {{userMessage}}",
         if (structKeyExists(guardrails, "output") && isArray(guardrails.output)) {
             var outputGuardrails = [];
             for (var path in guardrails.output) {
-                arrayAppend(outputGuardrails, expandPath(base & path));
+                arrayAppend(outputGuardrails, guardrailPath(expandPath(base & path)));
             }
             arguments.agentConfig.OUTPUTGUARDRAILS = outputGuardrails;
         }
@@ -283,6 +293,33 @@ Question: {{userMessage}}",
         // After this method returns, agentConfig now carries INPUTGUARDRAILS and
         // OUTPUTGUARDRAILS as arrays of absolute CFC paths, and the agent({...})
         // call in getOrCreateAgent() will look exactly like the snippet above.
+    }
+
+    // CommandBox keeps the site outside the ColdFusion root. This server build
+    // only loads a guardrail CFC whose path is under that root. The installed
+    // server already meets that rule, so this copies only when it has to.
+    private string function guardrailPath(required string absolutePath) {
+        var io = createObject("java", "java.io.File");
+        var sep = io.separator;
+        var source = io.init(arguments.absolutePath).getCanonicalFile();
+        var cfRoot = io.init(server.coldfusion.rootdir).getCanonicalFile();
+        var rootPath = cfRoot.getPath();
+        if (!rootPath.endsWith(sep)) rootPath &= sep;
+        if (source.getPath().startsWith(rootPath)) return source.getPath();
+
+        var webRoot = io.init(expandPath("/")).getCanonicalFile();
+        var webPath = webRoot.getPath();
+        if (!webPath.endsWith(sep)) webPath &= sep;
+        var rel = source.getPath();
+        if (rel.startsWith(webPath)) rel = rel.substring(javacast("int", webPath.length()));
+        else rel = source.getName();
+
+        var dest = io.init(cfRoot, "wwwroot" & sep & rel);
+        var parent = dest.getParentFile();
+        if (!parent.exists()) parent.mkdirs();
+        if (dest.exists()) dest.delete();
+        fileCopy(source.getPath(), dest.getPath());
+        return dest.getCanonicalPath();
     }
 
     public array function getOrCreateMcpClients(required struct cfg, array buildFrames = []) {

@@ -12,6 +12,24 @@ component {
    */
   public struct function validate( required string userMessage ) {
 
+    // Adobe invokes validate() through UdfInvocationUtil, which cannot see other
+    // methods on this CFC. Keep the coupon lookup local to this function.
+    var getEligibleCouponsText = function( required string userId ) {
+      if ( !len( arguments.userId ) ) return "";
+      try {
+        var mcp = createObject( "component", "api.agent.s6.ref.mcp.CommerceOpsServer" );
+        var result = mcp.getEligibleCoupons( userId = arguments.userId );
+        if ( isStruct( result ) && structKeyExists( result, "coupons" ) && isArray( result.coupons ) ) {
+          var labels = [];
+          for ( var c in result.coupons ) {
+            arrayAppend( labels, ( c.code ?: "" ) & ( len( c.description ?: "" ) ? " (" & c.description & ")" : "" ) );
+          }
+          return arrayToList( labels, ", " );
+        }
+      } catch ( any e ) { /* swallow — graceful degrade */ }
+      return "";
+    };
+
     // Keyword phrases — exact substring match via findNoCase below.
     var KEYWORDS = [
       "apply a discount", "give me a discount", "promo code", "make it cheaper",
@@ -52,24 +70,5 @@ component {
 
     trace.report( "discount-fabrication", "input", out );
     return out;
-  }
-
-  /**
-   * Best-effort MCP lookup. Returns "" if MCP is unavailable — the block still fires.
-   */
-  private string function getEligibleCouponsText( required string userId ) {
-    if ( !len( arguments.userId ) ) return "";
-    try {
-      var mcp = createObject( "component", "api.agent.s6.ref.mcp.CommerceOpsServer" );
-      var result = mcp.getEligibleCoupons( userId = arguments.userId );
-      if ( isStruct( result ) && structKeyExists( result, "coupons" ) && isArray( result.coupons ) ) {
-        var labels = [];
-        for ( var c in result.coupons ) {
-          arrayAppend( labels, ( c.code ?: "" ) & ( len( c.description ?: "" ) ? " (" & c.description & ")" : "" ) );
-        }
-        return arrayToList( labels, ", " );
-      }
-    } catch ( any e ) { /* swallow — graceful degrade */ }
-    return "";
   }
 }
