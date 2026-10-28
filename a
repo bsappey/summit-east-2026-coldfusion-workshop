@@ -100,3 +100,8 @@ http://localhost:8500/CFSummit2026Workshop/StyleMart/setup/reset-sqlite-datasour
 It should register stylemart and prologics and show products.count = 200. Then sign in to the store as jordan / Workshop2026!.
 
 If a machine has a CF_ADMIN_PASSWORD environment variable, that value will overwrite on the file. It has to be the same Administrator password
+
+
+If chat is not working plese run this:
+
+http://localhost:8500/CFSummit2026Workshop/StyleMart/api/agent/index.cfm?reload=1
