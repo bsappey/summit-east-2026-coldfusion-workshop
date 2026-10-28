@@ -84,3 +84,19 @@ It should register stylemart and prologics, and show products.count = 200.
 
 http://localhost:8500/CFSummit2026Workshop/StyleMart/api/commerce/register.cfm
 It should say the commerce REST app registered.
+
+
+Adin Error
+
+The reset page uses admin.password from the properties files to call the ColdFusion admin API. 
+ dit both files, in the copy under wwwroot:
+
+StyleMart\config\db.properties
+externalservices\prologics\config\db.properties
+Set admin.password= to the ColdFusion Administrator password for that machine. Save both. Then open this page again:
+
+http://localhost:8500/CFSummit2026Workshop/StyleMart/setup/reset-sqlite-datasources.cfm
+
+It should register stylemart and prologics and show products.count = 200. Then sign in to the store as jordan / Workshop2026!.
+
+If a machine has a CF_ADMIN_PASSWORD environment variable, that value will overwrite on the file. It has to be the same Administrator password
