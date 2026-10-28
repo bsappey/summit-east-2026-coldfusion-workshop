@@ -56,8 +56,7 @@ org.sqlite.JDBC
 
 
 stylemart   
-jdbc:sqlite:C:/ColdFusion2025/cfusion/wwwroot/CFSummit2026Workshop/
-org.sqlite.JDBC
+jdbc:sqlite:C:/ColdFusion2025/cfusion/wwwroot/CFSummit2026Workshop/StyleMart/db/sqlite/stylemart.db?journal_mode=WAL&busy_timeout=5000&foreign_keys=on
 
 
 
