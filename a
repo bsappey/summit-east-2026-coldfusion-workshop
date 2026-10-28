@@ -110,3 +110,7 @@ http://localhost:8500/CFSummit2026Workshop/StyleMart/api/agent/index.cfm?reload=
 
 C:\ColdFusion2025\cfusion\lib\pathfilter.json
 "documentaccesspaths": ";C:/ColdFusion2025/cfusion/wwwroot/CFSummit2026Workshop/samples/aihotfix/**;C:/ColdFusion2025/cfusion/wwwroot/CFSummit2026Workshop/StyleMart/api/agent/s5/data/rag/**;C:/ColdFusion2025/cfusion/wwwroot/CFSummit2026Workshop/StyleMart/api/agent/s6/data/rag/**"
+
+
+
+http://127.0.0.1:8080/resources/database/buildDatabase.cfm
